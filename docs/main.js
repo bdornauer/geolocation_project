@@ -13,6 +13,11 @@ const map = L.map("map", {
     maxZoom: 18,
 }).fitBounds(boundaries);
 
+
+// let url = "./maps/{z}/{y}/{x}.jpeg";
+
+// const postion = L.tileLayer(url).addTo(map);
+
 //If satellite-world (orthofoto) data needed use: https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}
 let url = "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}";
 //If satellite-world (orthofoto) data needed use: Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community
@@ -78,9 +83,8 @@ const history = [];
 let polyline;
 
 function success(pos) {
-    // const crd = [pos.coords.latitude, pos.coords.longitude]; // my current position
-    // const crd = [47.584040, 12.173309];
-    const crd = pointsOfInterest[count];
+    const crd = [pos.coords.latitude, pos.coords.longitude]; // my current position
+    //const crd = pointsOfInterest[count]; // simulated path
     history.push(crd);
     marker2.setLatLng(crd);
 
@@ -101,12 +105,13 @@ function success(pos) {
         }
     });
 
-    if (count < 4) {
-        count++;
-    } 
-    else {
-        count = 0;
-    }
+    // required for simulated path
+    // if (count < 4) {
+    //     count++;
+    // } 
+    // else {
+    //     count = 0;
+    // }
 }
 
 function error(err) {

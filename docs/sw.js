@@ -3,6 +3,9 @@ self.addEventListener('install', (event) => {
         caches.open('geoloc-game-v1')
             .then(cache => cache.addAll([
                 'index.html',
+                'leaflet.css',
+                'style.css',
+                'leaflet.js',
                 'main.js',
                 'icon512.png',
                 'icon192.png',
