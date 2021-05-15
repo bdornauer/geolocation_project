@@ -3,6 +3,7 @@ const boundaries = [
     [47.584724, 12.171843],
     [47.583015, 12.174],
 ];
+
 const center = [47.5839578, 12.1733215];
 
 const map = L.map("map", {
@@ -26,56 +27,127 @@ const postion = L.tileLayer(url, {
 }).addTo(map);
 
 //First set marker
-var uniIcon = L.icon({
-    iconUrl: "./uniIcon.png",
-    iconSize: [70, 50], // size of the icon
-    iconAnchor: [35, 25], // point of the icon which will correspond to marker's location
+const visitedIcon = L.icon({
+    iconUrl: "./flag_green.png",
+    iconSize: [16, 16], // size of the icon
+    iconAnchor: [16, 16], // point of the icon which will correspond to marker's location
 });
 
-var markerOptions = {
-    title: "Uni Innsbruck",
-    clickable: true,
-    draggable: true,
-    icon: uniIcon,
-};
+const unvisitedIcon = L.icon({
+    iconUrl: "./flag_red.png",
+    iconSize: [16, 16],
+    iconAnchor: [16, 16]
+});
 
-const marker = L.marker([47.2646390193732, 11.343621890834664], markerOptions).addTo(map);
-marker.bindPopup("Hi welcome to Uni Innsbruck").openPopup();
+const locationIcon = L.icon({
+    iconUrl: "./location.png",
+    iconSize: [16, 16],
+    iconAnchor: [16, 16]
+});
 
-let pointsOfInterest = [];
-for (let i = 0; i < 5; i++) {
-    x = Math.random() / 10;
-    y = Math.random() / 10;
-    const marker = L.marker([center[0] + x, center[1] + y], markerOptions).addTo(map);
-    pointsOfInterest.push(marker);
-    console.log(pointsOfInterest[i]);
+const pointsOfInterest = [
+    [47.584040, 12.173309], [47.583690, 12.173462], [47.583403, 12.173129], [47.583989, 12.172339], [47.583620, 12.172893]
+];
+
+const poiMarkers = [];
+
+function negOrPos() {
+    if (Math.random() < 0.5)
+        return (-1)
+    return (1);
 }
 
-//Second marker - with your position
-const options = {
-    enableHighAccuracy: true,
-    timeout: 5000,
-    maximumAge: 0,
-};
+// for (let i = 0; i < 5; i++) {
+//     x = Math.random() * negOrPos() / 1000;
+//     y = Math.random() * negOrPos() / 1000;
+//     const randPos = [center[0] + x, center[1] + y];
+//     const marker = L.marker(randPos, {icon: unvisitedIcon}).addTo(map);
+//     poiMarkers.push(marker);
+// }
+
+pointsOfInterest.map((poiPos, index) => {
+    const marker = L.marker(poiPos, {icon: unvisitedIcon}).addTo(map);
+    poiMarkers.push(marker);
+});
+
+const marker2 = L.marker(center, {icon: locationIcon}).addTo(map);
+marker2.bindPopup("Here I am").openPopup();
+
+let count = 0;
+const history = [];
+let polyline;
 
 function success(pos) {
-    var crd = pos.coords;
-    const maker2 = L.marker([crd.latitude, crd.longitude]).addTo(map);
-    maker2.bindPopup("Here I am").openPopup();
-    console.log("Your current position is:");
-    console.log(`Latitude : ${crd.latitude}`);
-    console.log(`Longitude: ${crd.longitude}`);
+    // const crd = [pos.coords.latitude, pos.coords.longitude]; // my current position
+    // const crd = [47.584040, 12.173309];
+    const crd = pointsOfInterest[count];
+    history.push(crd);
+    marker2.setLatLng(crd);
+
+    if (history.length == 1) {
+        polyline = L.polyline([crd], {color: 'red'}).addTo(map);
+    } else {
+        polyline.addLatLng(crd);
+    }
+
+    poiMarkers.map((poiMarker, index) => {
+        const poiPos = [poiMarker._latlng.lat, poiMarker._latlng.lng];
+
+        if (distanceInMeters(crd[0], crd[1], poiPos[0], poiPos[1]) <= 5) {
+            poiMarker.setIcon(visitedIcon);
+        }
+    });
+
+    if (count < 4) {
+        count++;
+    } 
+    else {
+        count = 0;
+    }
 }
 
 function error(err) {
     console.warn(`ERROR(${err.code}): ${err.message}`);
 }
 
-navigator.geolocation.getCurrentPosition(success, error, options);
+const options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+};
+
+navigator.geolocation.watchPosition(success, error, options);
+
+
+// Haversine formula for distance calculation (https://stackoverflow.com/questions/365826/calculate-distance-between-2-gps-coordinates)
+//                                            (http://www.movable-type.co.uk/scripts/latlong.html)
+
+function degreesToRadians(degrees) {
+    return degrees * Math.PI / 180;
+}
+
+// Haversine formula
+function distanceInMeters(lat1, lon1, lat2, lon2) {
+    const earthRadius = 6371000; // in m
+
+    var dLat = degreesToRadians(lat2 - lat1);
+    var dLon = degreesToRadians(lon2 - lon1);
+  
+    lat1 = degreesToRadians(lat1);
+    lat2 = degreesToRadians(lat2);
+  
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2); 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+
+    return earthRadius * c;
+}
+
 
 // PWA install prompt
 let pwaPrompt;
 const prompt = document.querySelector("#pwa-install-prompt");
+
 window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     pwaPrompt = e;
