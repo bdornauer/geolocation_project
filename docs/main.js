@@ -30,19 +30,19 @@ const postion = L.tileLayer(url, {
 const visitedIcon = L.icon({
     iconUrl: "./flag_green.png",
     iconSize: [16, 16], // size of the icon
-    iconAnchor: [16, 16], // point of the icon which will correspond to marker's location
+    iconAnchor: [4, 15], // point of the icon which will correspond to marker's location
 });
 
 const unvisitedIcon = L.icon({
     iconUrl: "./flag_red.png",
     iconSize: [16, 16],
-    iconAnchor: [16, 16]
+    iconAnchor: [4, 15]
 });
 
 const locationIcon = L.icon({
     iconUrl: "./location.png",
     iconSize: [16, 16],
-    iconAnchor: [16, 16]
+    iconAnchor: [8, 15]
 });
 
 const pointsOfInterest = [
@@ -66,7 +66,7 @@ function negOrPos() {
 // }
 
 pointsOfInterest.map((poiPos, index) => {
-    const marker = L.marker(poiPos, {icon: unvisitedIcon}).addTo(map);
+    const marker = L.marker(poiPos, {icon: unvisitedIcon}).addTo(map).bindPopup('You are X meters away');
     poiMarkers.push(marker);
 });
 
@@ -90,10 +90,13 @@ function success(pos) {
         polyline.addLatLng(crd);
     }
 
-    poiMarkers.map((poiMarker, index) => {
+    poiMarkers.map((poiMarker) => {
         const poiPos = [poiMarker._latlng.lat, poiMarker._latlng.lng];
 
-        if (distanceInMeters(crd[0], crd[1], poiPos[0], poiPos[1]) <= 5) {
+        let distance = distanceInMeters(crd[0], crd[1], poiPos[0], poiPos[1]);
+        poiMarker._popup.setContent(`You are ${Math.round(distance)} meters away!`);
+
+        if (distance <= 5) {
             poiMarker.setIcon(visitedIcon);
         }
     });
