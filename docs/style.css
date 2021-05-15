@@ -1,0 +1,29 @@
+#pwa-install-prompt {
+    display: none;
+    position: absolute;
+    top: 100%;
+    padding: 15px;
+    background: #c9c9c9;
+    border-radius: 10px;
+    left: 50%;
+    transform: translate(-50%,-110%);
+}
+#pwa-install-prompt.show {
+    display: block;
+}
+.prompt-buttons {
+    display: flex;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+#mapid {
+    height: 40vh;
+    width: 40vh;
+}
