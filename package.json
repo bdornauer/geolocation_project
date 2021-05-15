@@ -1,0 +1,19 @@
+{
+  "name": "geolocation_project",
+  "scripts": {
+    "start": "http-server docs -p 9000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeKnackerBD/geolocation_project.git"
+  },
+  "keywords": [],
+  "author": "Benedikt Dornauer, Patrik Golec, Viktoria Schwarz, Alex Herold",
+  "bugs": {
+    "url": "https://github.com/codeKnackerBD/geolocation_project/issues"
+  },
+  "homepage": "https://github.com/codeKnackerBD/geolocation_project#readme",
+  "devDependencies": {
+    "http-server": "^0.12.3"
+  }
+}

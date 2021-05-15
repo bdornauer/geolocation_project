@@ -23,7 +23,7 @@
     width: 100vw;
 }
 
-#mapid {
-    height: 40vh;
-    width: 40vh;
+#map {
+    height: 400px;
+    width: 600px;
 }

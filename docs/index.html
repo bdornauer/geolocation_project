@@ -5,27 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="theme-color" content="#ccffcc">
-  <meta name="description" content="EBMI GIS PWA">
+  <meta name="description" content="Geolocation Game">
 
-  <title>EBMI GIS PWA</title>
+  <title>Geolocation Game</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <script async src="app.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-        integrity="pk.eyJ1IjoiZmhrdWZzdGVpbjIwMjEiLCJhIjoiY2tvcGc3cmw2MGtyODJycGNteWh4c3VwMyJ9.H5YrvDI6niJOPC5yhdvd1g"
-        crossorigin=""/>
-
+  <link rel="stylesheet" href="leaflet.css">
   <link rel="stylesheet" type="text/css" href="style.css">
-  <script defer src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-          integrity="pk.eyJ1IjoiZmhrdWZzdGVpbjIwMjEiLCJhIjoiY2tvcGc3cmw2MGtyODJycGNteWh4c3VwMyJ9.H5YrvDI6niJOPC5yhdvd1g"
-          crossorigin=""></script>
 
+  <script defer src="leaflet.js"></script>
   <script defer src="main.js"></script>
 </head>
 <body>
 
 <h1>Map</h1>
 <div class="container">
-  <div id="mapid"></div>
+  <div id="map"></div>
 </div>
 
 <div id="pwa-install-prompt">

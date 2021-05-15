@@ -1,5 +1,12 @@
-//set Uni Innsbruck as view
-let mymap = L.map('mapid').setView([47.261423214435965, 11.344921912458144], 13);
+//set FH Kufstein as view
+const boundaries = [[47.584724, 12.171843], [47.583015, 12.174000]];
+
+const map = L.map('map', {
+    maxBounds: boundaries,
+    center: [47.5839578, 12.1733215],
+    minZoom: 17,
+    maxZoom: 18
+}).fitBounds(boundaries);
 
 //If satellite-world (orthofoto) data needed use: https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}
 let url = "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}";
@@ -8,22 +15,13 @@ let atr = "Map data &copy; <a href=\"https://www.openstreetmap.org/copyright\">O
 
 const postion = L.tileLayer(url, {
     attribution: atr,
-    maxZoom: 18,
-    minZoom: 12,
     id: 'mapbox/streets-v11',
     tileSize: 512,
     zoomOffset: -1,
     accessToken: 'pk.eyJ1IjoiZmhrdWZzdGVpbjIwMjEiLCJhIjoiY2tvcGc3cmw2MGtyODJycGNteWh4c3VwMyJ9.H5YrvDI6niJOPC5yhdvd1g'
-}).addTo(mymap);
-
-//send boundary for map
-mymap.setMaxBounds([
-    [47.271441366076125, 11.306899157102984] //north west
-    ,[47.242630987769274, 11.503782759092074] //south east
-])
+}).addTo(map);
 
 //First set marker
-
 var uniIcon = L.icon({
     iconUrl: './uniIcon.png',
     iconSize:     [70, 50], // size of the icon
@@ -37,9 +35,8 @@ var markerOptions = {
     icon: uniIcon
 }
 
-const marker = L.marker([47.2646390193732, 11.343621890834664], markerOptions).addTo(mymap);
+const marker = L.marker([47.2646390193732, 11.343621890834664], markerOptions).addTo(map);
 marker.bindPopup('Hi welcome to Uni Innsbruck').openPopup();
-
 
 //Second marker - with your position
 const options = {
@@ -50,7 +47,7 @@ const options = {
 
 function success(pos) {
     var crd = pos.coords;
-    const maker2 = L.marker([crd.latitude, crd.longitude]).addTo(mymap);
+    const maker2 = L.marker([crd.latitude, crd.longitude]).addTo(map);
     maker2.bindPopup('Here I am').openPopup();
     console.log('Your current position is:');
     console.log(`Latitude : ${crd.latitude}`);
@@ -62,3 +59,24 @@ function error(err) {
 }
 
 navigator.geolocation.getCurrentPosition(success, error, options);
+
+// PWA install prompt
+let pwaPrompt;
+const prompt = document.querySelector('#pwa-install-prompt');
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    pwaPrompt = e;
+    prompt.classList.add('show');
+})
+
+prompt.addEventListener('click', function(event) {
+    if (event.target.dataset.id === 'pwa-install-y' && pwaPrompt) {
+        pwaPrompt.prompt();
+        pwaPrompt.userChoice.then(() => {
+            prompt.classList.remove('show');
+            pwaPrompt = null;
+        });
+    } else {
+        prompt.classList.remove('show');
+    }
+});
