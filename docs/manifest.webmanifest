@@ -1,12 +1,12 @@
 {
-    "name": "EBMI GIS PWA",
-    "short_name": "GIS PWA",
+    "name": "Geolocation Game PWA",
+    "short_name": "GLG PWA",
     "display": "standalone",
     "start_url": "./",
     "scope": "./",
     "background_color": "#fff",
     "theme_color": "#fff",
-    "description": "EBMI Mobile GIS Systeme Location-based Game Project",
+    "description": "Location-based Game Project",
     "icons": [
         {
             "src": "icon512.png",

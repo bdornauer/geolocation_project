@@ -14,6 +14,12 @@
 
   <script defer src="leaflet.js"></script>
   <script defer src="main.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+        .catch(console.error);
+    }
+</script>
 </head>
 <body>
 
@@ -30,11 +36,5 @@
     <button data-id="pwa-install-n">No</button>
   </div>
 </div>
-<script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-            .catch(console.error);
-    }
-</script>
 </body>
 </html>

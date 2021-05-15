@@ -1,9 +1,9 @@
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open('ebmigis-v1')
+        caches.open('geoloc-game-v1')
             .then(cache => cache.addAll([
                 'index.html',
-                'app.js',
+                'main.js',
                 'icon512.png',
                 'icon192.png',
                 'icon16.png',
